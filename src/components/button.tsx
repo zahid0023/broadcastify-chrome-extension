@@ -11,7 +11,7 @@ export default function Button({ children, onClick, type = "button" }: ButtonPro
         <button
             type={type}
             onClick={onClick}
-            className="w-[140px] px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            className="w-30 py-2 mx-auto block border-2 border-red-700 rounded-md text-red-700 font-bold text-sm hover:bg-red-400 hover:text-white active:scale-[0.98] transition"
         >
             {children}
         </button>
