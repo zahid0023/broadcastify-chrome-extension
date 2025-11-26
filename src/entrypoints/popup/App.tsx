@@ -52,7 +52,7 @@ export default function App() {
       </div>
 
       {/* Description Text */}
-      <p className="text-[11px] mt-4 text-center leading-relaxed max-w-[240px] mx-auto line-clamp-2">
+      <p className="text-[11px] mt-4 text-center leading-relaxed max-w-[210px] mx-auto line-clamp-2">
         After capture is finished, a new tab will be opened automatically for you to
         name and save the file. Please do not close the tab before saving the file!
       </p>
@@ -70,7 +70,7 @@ export default function App() {
           </p>
         </div>
 
-        <p className="text-[11px] mt-4 text-center leading-relaxed max-w-[240px] mx-auto line-clamp-2">
+        <p className="text-[11px] mt-4 text-center leading-relaxed max-w-[210px] mx-auto line-clamp-2">
           Hotkeys may not work if another extension uses the same shortcut.
           Maximum capture duration is 30 minutes due to Chrome memory constraints.
         </p>
