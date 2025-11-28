@@ -5,7 +5,19 @@ import { useState } from "react";
 export default function App() {
   const [isRecording, setIsRecording] = useState(false);
 
-  function handleButtonClick() { setIsRecording(!isRecording); }
+  function startRecording() {
+  chrome.runtime.sendMessage({ type: "START_RECORDING" });
+  setIsRecording(true);
+}
+function stopRecording() {
+  chrome.runtime.sendMessage({ type: "STOP_RECORDING" });
+  setIsRecording(false);
+}
+
+function cancelRecording() {
+  chrome.runtime.sendMessage({ type: "STOP_RECORDING" });
+  setIsRecording(false);
+}
 
   return (
     <div className="w-[380px] p-4 font-sans text-black">
@@ -26,9 +38,7 @@ export default function App() {
   {!isRecording ? (
 
     // NOT RECORDING UI
-    <Button onClick={handleButtonClick}>
-      Start Capture
-    </Button>
+    <Button onClick={startRecording}>Start Capture</Button>
 
   ) : (
 
@@ -42,8 +52,8 @@ export default function App() {
       </div>
 
       <div className="flex justify-center gap-4">
-        <Button onClick={handleButtonClick}>Cancel</Button>
-        <Button onClick={handleButtonClick}>Stop</Button>
+        <Button onClick={cancelRecording}>Cancel</Button>
+        <Button onClick={stopRecording}>Stop</Button>
       </div>
 
     </div>
