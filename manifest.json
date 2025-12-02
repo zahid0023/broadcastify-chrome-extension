@@ -1,4 +1,33 @@
 {
-    "version": 3,
-    "service_worker":
+  "manifest_version": 3,
+  "name": "Capture and Transcribe",
+  "description": "Capture audio from the current tab and save it.",
+  "version": "1.0.0",
+  "permissions": ["tabCapture", "storage", "offscreen", "activeTab"],
+  "background": {
+    "service_worker": "src/background/index.js"
+  },
+  "action": {
+    "default_popup": "src/popup/index.html"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/offscreen/offscreen.html",
+        "src/offscreen/offscreen.js",
+        "src/save/complete.html"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_scripts": [
+  {
+    "matches": ["<all_urls>"],
+    "js": ["src/content/index.js"]
+  }
+],
+  "icons": {
+    "128": "src/assets/logo.png"
+  }
 }
