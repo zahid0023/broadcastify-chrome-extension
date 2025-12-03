@@ -48,6 +48,19 @@ chrome.runtime.onMessage.addListener(async (msg) => {
     console.log("Recording started");
   }
 
+  if (msg.settings && msg.settings.maxTime) {
+    const limitMs = msg.settings.maxTime * 60 * 1000;
+
+    setTimeout(() => {
+      if (recorder && recorder.state !== "inactive") {
+        console.log("Auto-stopping due to maxTime");
+        recorder.stop();
+        currentStream.getTracks().forEach(t => t.stop());
+      }
+    }, limitMs);
+  }
+
+
   if (msg.action === "STOP_RECORDING") {
     console.log("Offscreen: STOP_RECORDING");
 

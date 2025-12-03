@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the UI
     function initUI() {
         updateUI();
-        
+
         // Check for active capture session
         chrome.storage.local.get(['isCapturing', 'startTime'], function(result) {
             if (result.isCapturing && result.startTime) {
@@ -45,15 +45,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update the time remaining display
     function updateTimeRemaining() {
         if (!startTime) return;
-        
+
         const elapsed = Date.now() - startTime;
         const remaining = Math.max(0, MAX_CAPTURE_TIME - elapsed);
-        
+
         if (remaining <= 0) {
             stopCapture();
             return;
         }
-        
+
         const minutes = Math.floor(remaining / 60000);
         const seconds = Math.floor((remaining % 60000) / 1000);
         timeRemEl.textContent = `Time remaining: ${minutes}:${seconds.toString().padStart(2, '0')}`;
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function startCapture() {
         isCapturing = true;
         startTime = Date.now();
-        
+
         chrome.storage.local.set({
             isCapturing: true,
             startTime: startTime
@@ -79,12 +79,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function stopCapture(shouldSave = false) {
         clearInterval(timerInterval);
         isCapturing = false;
-        
+
         chrome.storage.local.remove(['isCapturing', 'startTime'], function() {
             updateUI();
             chrome.runtime.sendMessage({ action: 'stopCapture', shouldSave })
                 .catch(err => console.log('Background script not ready:', err));
-            
+
             if (shouldSave) {
                 chrome.tabs.create({ url: 'save.html' });
             }
@@ -95,6 +95,10 @@ document.addEventListener('DOMContentLoaded', function() {
     startBtn.addEventListener('click', startCapture);
     finishBtn.addEventListener('click', () => stopCapture(true));
     cancelBtn.addEventListener('click', () => stopCapture(false));
+
+    document.getElementById("options").addEventListener("click", () => {
+    chrome.runtime.openOptionsPage();
+});
 
     // Initialize the UI
     initUI();
