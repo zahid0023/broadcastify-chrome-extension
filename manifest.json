@@ -3,7 +3,13 @@
   "name": "Capture and Transcribe",
   "description": "This extension captures the audio on the current tab and saves the output file on your computer when the capture is complete. You can then send it assembly.ai to transcribe the speech.",
   "version": "1.0.0",
-  "permissions": ["tabCapture", "storage", "offscreen", "activeTab","downloads"],
+  "permissions": [
+    "tabCapture",
+    "storage",
+    "offscreen",
+    "activeTab",
+    "downloads"
+  ],
   "background": {
     "service_worker": "src/background/index.js"
   },
@@ -27,13 +33,15 @@
     }
   ],
   "content_scripts": [
-  {
-    "matches": ["<all_urls>"],
-    "js": ["src/content/index.js"]
-  }
-],
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/index.js"]
+    }
+  ],
 
-"options_page": "src/options/options.html",
+  "host_permissions": ["https://generativelanguage.googleapis.com/"],
+
+  "options_page": "src/options/options.html",
 
   "icons": {
     "128": "src/assets/logo.png"

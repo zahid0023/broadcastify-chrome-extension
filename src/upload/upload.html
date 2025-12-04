@@ -1,46 +1,57 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Upload Audio for Transcription</title>
-    <link rel="stylesheet" href="upload.css">
-</head>
-<body>
+    <link rel="stylesheet" href="upload.css" />
+  </head>
+  <body>
     <div class="container">
-        <div class="header">
-            <img src="../assets/logo.png" alt="Logo" class="logo">
-            <h1>Transcribe Audio</h1>
+      <div class="header">
+        <img src="../assets/logo.png" alt="Logo" class="logo" />
+        <h1>Transcribe Audio</h1>
+      </div>
+
+      <div class="upload-container">
+        <div class="drop-zone" id="dropZone">
+          <input
+            type="file"
+            id="fileInput"
+            accept="audio/*"
+            class="file-input"
+          />
+          <div class="drop-zone-content">
+            <img
+              src="../assets/upload-icon.svg"
+              alt="Upload"
+              class="upload-icon"
+            />
+            <p>Drag & drop your audio file here or click to browse</p>
+            <p class="file-types">Supported formats: MP3</p>
+          </div>
         </div>
 
-        <div class="upload-container">
-            <div class="drop-zone" id="dropZone">
-                <input type="file" id="fileInput" accept="audio/*" class="file-input" />
-                <div class="drop-zone-content">
-                    <img src="../assets/upload-icon.svg" alt="Upload" class="upload-icon">
-                    <p>Drag & drop your audio file here or click to browse</p>
-                    <p class="file-types">Supported formats: MP3</p>
-                </div>
-            </div>
-
-            <div class="selected-file" id="selectedFile">
-                <!-- File info will be displayed here -->
-            </div>
-
-            <div class="button-container">
-                <button id="transcribeBtn" class="btn primary" disabled>Transcribe Audio</button>
-            </div>
+        <div class="selected-file" id="selectedFile">
+          <!-- File info will be displayed here -->
         </div>
 
-        <div class="status-container" id="statusContainer" style="display: none;">
-            <div class="progress-bar">
-                <div class="progress" id="progressBar"></div>
-            </div>
-            <p class="status-text" id="statusText">Preparing to transcribe...</p>
-        </div>
-        
         <div class="button-container">
-            <button id="backButton" class="btn secondary">Back to Recorder</button>
+          <button id="transcribeBtn" class="btn primary" disabled>
+            Transcribe Audio
+          </button>
         </div>
+      </div>
+
+      <div class="status-container" id="statusContainer" style="display: none">
+        <div class="progress-bar">
+          <div class="progress" id="progressBar"></div>
+        </div>
+        <p class="status-text" id="statusText">Preparing to transcribe...</p>
+      </div>
+
+      <div class="button-container">
+        <button id="backButton" class="btn secondary">Back to Recorder</button>
+      </div>
     </div>
     <script src="upload.js"></script>
-</body>
+  </body>
 </html>
