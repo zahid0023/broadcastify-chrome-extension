@@ -1,0 +1,250 @@
+body {
+    font-family: Ubuntu, sans-serif;
+    background: #fafafa;
+    margin: 20px;
+    color: #333;
+    padding: 0;
+}
+
+.container {
+    max-width: 500px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px 30px;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #4a6bff;
+    margin-bottom: 20px;
+}
+
+.header .logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.header h1 {
+    font-size: 24px;
+    margin: 0;
+    color: #4a6bff;
+}
+
+.button-container {
+    margin: 25px 0 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.button-container .btn {
+    margin: 8px;
+    min-width: 180px;
+    display: inline-block;
+}
+
+/* Secondary button style */
+.secondary {
+    background: #f8f9ff;
+    color: #4a6bff;
+    border: 1px solid #4a6bff;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.secondary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(74, 107, 255, 0.1), rgba(74, 107, 255, 0.2));
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.secondary:hover {
+    background: #f0f2ff;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(74, 107, 255, 0.2);
+}
+
+.secondary:hover::before {
+    opacity: 1;
+}
+
+.secondary:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.upload-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.drop-zone {
+    border: 2px dashed #c7d0ff;
+    border-radius: 8px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 20px;
+    position: relative;
+    background-color: #f8f9ff;
+}
+
+.drop-zone:hover {
+    border-color: #4a6bff;
+    background-color: #f0f2ff;
+}
+
+.drop-zone.dragover {
+    background-color: #e5e8ff;
+    border-color: #4a6bff;
+}
+
+.file-input {
+    display: none;
+}
+
+.upload-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
+
+.file-types {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.selected-file {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    display: none;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.file-icon {
+    font-size: 24px;
+    margin-right: 15px;
+    color: #3498db;
+}
+
+.file-details {
+    flex: 1;
+}
+
+.file-name {
+    font-weight: 600;
+    margin: 0 0 5px 0;
+}
+
+.file-size {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.remove-file {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* Removed transcription options styles */
+
+.btn {
+    display: inline-block;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(135deg, #4a6bff, #8a2be2);
+    transition: all 0.25s ease;
+    min-width: 140px;
+    text-align: center;
+    margin: 5px 10px;
+}
+
+.primary:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #3a5bef, #7a1ad9);
+}
+
+.primary:active {
+    transform: translateY(0);
+}
+
+.primary:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.status-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.progress-bar {
+    height: 8px;
+    background-color: #e5e8ff;
+    border-radius: 4px;
+    margin: 10px 0 20px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background-color: #4a6bff;
+    transition: width 0.3s ease;
+}
+
+.status-text {
+    color: #7f8c8d;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .header h1 {
+        font-size: 1.5em;
+    }
+    
+    .drop-zone {
+        padding: 30px 15px;
+    }
+}
