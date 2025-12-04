@@ -1,97 +1,61 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const encodeProgress = document.getElementById("encodeProgress");
-  const saveCustomBtn = document.getElementById("downloadCustom");
-  const saveDateBtn = document.getElementById("downloadDate");
-  const closeBtn = document.getElementById("close");
-  const status = document.getElementById("status");
-  const previewPlayer = document.getElementById("previewPlayer");
-  const filenameInput = document.getElementById("filenameInput");
+document.addEventListener('DOMContentLoaded', () => {
+  const encodeProgress = document.getElementById('encodeProgress');
+  const saveButton = document.getElementById('downloadCustom');
+  const saveDateButton = document.getElementById('downloadDate');
+  const closeButton = document.getElementById('close');
+  const status = document.getElementById('status');
+  const previewPlayer = document.getElementById('previewPlayer');
+  const filenameInput = document.getElementById('filenameInput');
 
-  const params = new URLSearchParams(window.location.search);
-  const audioUrl = params.get("audio");
+  // Get audio URL from query parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const audioURL = urlParams.get('audio');
 
-  if (!audioUrl) {
-    status.textContent = "No audio file found. Please try recording again.";
-    saveCustomBtn.style.display = "none";
-    saveDateBtn.style.display = "none";
+  if (!audioURL) {
+    status.textContent = 'Error: No audio data received';
     return;
   }
 
-  // Hide save buttons until encoding is done
-  saveCustomBtn.style.display = "none";
-  saveDateBtn.style.display = "none";
-  previewPlayer.style.display = "none";
+  // Set up audio preview
+  previewPlayer.src = audioURL;
+  
+  // Set default filename with current date
+  const now = new Date();
+  const defaultFilename = `recording-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.webm`;
+  filenameInput.value = defaultFilename.replace('.webm', '');
+  
+  // Update status
+  encodeProgress.style.width = '100%';
+  status.textContent = 'File is ready!';
 
-  status.textContent = "Please wait...";
-
-  /** --------------------------------
-   *   🔵 Smooth Fake Encoding Animation
-   * --------------------------------*/
-  let progress = 0;
-  const duration = 1500; // total animation time (ms)
-  const stepTime = 20;   // update every 20ms
-  const increment = 100 / (duration / stepTime);
-
-  const ani = setInterval(() => {
-    progress += increment;
-
-    if (progress >= 100) {
-      progress = 100;
-      encodeProgress.style.width = "100%";
-
-      clearInterval(ani);
-      onEncodingComplete();
-    } else {
-      encodeProgress.style.width = progress + "%";
-    }
-  }, stepTime);
-
-  /** --------------------------------
-   *  🔵 Once “encoding” is done
-   * --------------------------------*/
-  function onEncodingComplete() {
-    status.textContent = "File is ready!";
-
-    // Show audio preview
-    previewPlayer.src = audioUrl;
-    previewPlayer.style.display = "block";
-
-    // Show save options
-    saveCustomBtn.style.display = "inline-block";
-    saveDateBtn.style.display = "inline-block";
-
-    // Generate default filename
-    const today = new Date().toISOString().slice(0, 10);
-    const defaultBase = `Capture-${today}`;
-    filenameInput.value = defaultBase;
-
-    function ensureExt(name) {
-      if (!name.toLowerCase().endsWith(".webm")) return name + ".webm";
-      return name;
-    }
-
-    saveCustomBtn.onclick = () => {
-      let base = filenameInput.value.trim() || defaultBase;
-      chrome.downloads.download({
-        url: audioUrl,
-        filename: ensureExt(base),
-        saveAs: true
-      });
-    };
-
-    saveDateBtn.onclick = () => {
-      chrome.downloads.download({
-        url: audioUrl,
-        filename: `${defaultBase}.webm`,
-        saveAs: true
-      });
-    };
-  }
-
-  /** Close page */
-  closeBtn.addEventListener("click", () => {
-    chrome.tabs.getCurrent((tab) => {
-      chrome.tabs.remove(tab.id);
+  // Setup save with custom filename
+  saveButton.addEventListener('click', () => {
+    const filename = filenameInput.value.trim() || 'recording';
+    const fullFilename = filename.endsWith('.webm') ? filename : `${filename}.webm`;
+    
+    chrome.downloads.download({
+      url: audioURL,
+      filename: fullFilename,
+      saveAs: true
     });
+  });
+
+  // Setup save with date filename
+  saveDateButton.addEventListener('click', () => {
+    chrome.downloads.download({
+      url: audioURL,
+      filename: defaultFilename,
+      saveAs: true
+    });
+  });
+
+  // Close button
+  closeButton.addEventListener('click', () => {
+    window.close();
+  });
+
+  // Show all buttons
+  [saveButton, saveDateButton, closeButton].forEach(btn => {
+    if (btn) btn.style.display = 'inline-block';
   });
 });

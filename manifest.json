@@ -16,7 +16,12 @@
       "resources": [
         "src/offscreen/offscreen.html",
         "src/offscreen/offscreen.js",
-        "src/save/complete.html"
+        "src/save/complete.html",
+        "src/workers/mp3worker.js",
+        "src/encoders/libmp3lame.min.js",
+        "src/upload/upload.html",
+        "src/upload/upload.js",
+        "src/upload/upload.css"
       ],
       "matches": ["<all_urls>"]
     }
