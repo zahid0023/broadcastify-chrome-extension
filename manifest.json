@@ -4,6 +4,7 @@
   "description": "This extension captures the audio on the current tab and saves the output file on your computer when the capture is complete. You can then send it assembly.ai to transcribe the speech.",
   "version": "1.0.0",
   "permissions": [
+    "tabs",
     "tabCapture",
     "storage",
     "offscreen",
