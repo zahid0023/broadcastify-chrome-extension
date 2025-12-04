@@ -6,7 +6,7 @@ let audioContext = null;
 // Clean up resources
 function cleanup() {
   if (recorder && recorder.state !== 'inactive') {
-    try { recorder.stop(); } catch (e) {}
+    try { recorder.stop(); } catch (e) { }
   }
 
   if (currentStream) {
@@ -17,7 +17,7 @@ function cleanup() {
   if (audioContext && audioContext.state !== 'closed') {
     try {
       audioContext.close();
-    } catch (e) {}
+    } catch (e) { }
   }
 
   chunks = [];
@@ -68,21 +68,25 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
       recorder.onstop = async () => {
         try {
           const webmBlob = new Blob(chunks, { type: 'audio/webm' });
-          const mp3Blob = await convertToMp3(webmBlob);
-          const url = URL.createObjectURL(mp3Blob);
 
-          chrome.runtime.sendMessage({
-            action: 'AUDIO_READY',
-            audioUrl: url,
-            format: 'mp3',
-            blob: mp3Blob
-          });
-        } catch (error) {
-          console.error('Error in recorder.onstop:', error);
-          chrome.runtime.sendMessage({
-            action: 'RECORDING_ERROR',
-            error: error.message
-          });
+          // Convert to Base64 immediately
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64Data = reader.result.split(',')[1]; // only Base64 part
+
+            // Send Base64 and mime type to background
+            chrome.runtime.sendMessage({
+              action: 'AUDIO_READY',
+              base64Data,
+              mimeType: webmBlob.type
+            });
+          };
+
+          reader.readAsDataURL(webmBlob);
+
+        } catch (err) {
+          console.error('Error in recorder.onstop:', err);
+          chrome.runtime.sendMessage({ action: 'RECORDING_ERROR', error: err.message });
         } finally {
           cleanup();
         }
