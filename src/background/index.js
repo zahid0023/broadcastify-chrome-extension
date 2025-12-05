@@ -1,7 +1,7 @@
 console.log("Background loaded");
 
 // --- Configuration ---
-const GEMINI_API_KEY = "AIzaSyCuxwOg9dvDELmcAYeXb1776SGG_kNAFW4";
+const GEMINI_API_KEY = "AIzaSyDIpuMl33IfvzK0b_i1cK_wa_9yd-o3538";
 const GENERATE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 // --- Helper to send status updates to popup ---
