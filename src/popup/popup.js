@@ -92,10 +92,6 @@ document.addEventListener('DOMContentLoaded', function () {
     finishBtn.addEventListener('click', () => stopCapture(true));
     cancelBtn.addEventListener('click', () => stopCapture(false));
 
-    document.getElementById("options").addEventListener("click", () => {
-        chrome.runtime.openOptionsPage();
-    });
-
     // Initialize the UI
     initUI();
 });
