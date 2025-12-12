@@ -1,49 +1,42 @@
 {
   "manifest_version": 3,
   "name": "Capture and Transcribe",
-  "description": "This extension captures the audio on the current tab and saves the output file on your computer when the capture is complete. You can then send it assembly.ai to transcribe the speech.",
+  "description": "Capture audio from your current tab and save it as an audio file",
   "version": "1.0.0",
+  
   "permissions": [
-    "tabs",
     "tabCapture",
     "storage",
-    "offscreen",
-    "activeTab",
-    "downloads"
+    "offscreen"
   ],
+  
   "background": {
     "service_worker": "src/background/index.js"
   },
+  
   "action": {
-    "default_popup": "src/popup/index.html"
+    "default_popup": "src/popup/screens/capture/capture.html",
+    "default_icon": {
+      "128": "src/assets/logo.png"
+    }
   },
-
+  
   "web_accessible_resources": [
     {
       "resources": [
+        "src/assets/logo.png"
+      ],
+      "matches": ["<all_urls>"]
+    },
+    {
+      "resources": [
         "src/offscreen/offscreen.html",
-        "src/offscreen/offscreen.js",
-        "src/save/complete.html",
-        "src/workers/mp3worker.js",
-        "src/encoders/libmp3lame.min.js",
-        "src/upload/upload.html",
-        "src/upload/upload.js",
-        "src/upload/upload.css"
+        "src/offscreen/offscreen.js"
       ],
       "matches": ["<all_urls>"]
     }
   ],
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["src/content/index.js"]
-    }
-  ],
-
-  "host_permissions": ["https://generativelanguage.googleapis.com/"],
-
-  "options_page": "src/options/options.html",
-
+  
   "icons": {
     "128": "src/assets/logo.png"
   }

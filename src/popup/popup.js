@@ -131,12 +131,15 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    // State variables
     let isCapturing = false;
     let startTime;
     let timerInterval;
     const MAX_CAPTURE_TIME = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-    // Initialize the UI
+    /**
+     * Initialize the UI components
+     */
     function initUI() {
       updateUI();
 
@@ -188,45 +191,78 @@ document.addEventListener("DOMContentLoaded", function () {
         .padStart(2, "0")}`;
     }
 
-    // Start capture
+    /**
+     * Start the audio capture
+     */
     function startCapture() {
       isCapturing = true;
       startTime = Date.now();
 
-      chrome.storage.local.set(
-        {
-          isCapturing: true,
-          startTime: startTime,
-        },
-        function () {
-          startTimer();
-          updateUI();
-          chrome.runtime
-            .sendMessage({ action: "startCapture" })
-            .catch((err) => console.log("Background script not ready:", err));
+        // Toggle button visibility
+        startBtn.style.display = 'none';
+        actionButtons.style.display = 'flex';
+
+        // Update status
+        statusEl.textContent = 'Capture in progress...';
+        startTimer();
+    }
+
+    /**
+     * Stop the audio capture
+     * @param {boolean} save - Whether to save the captured audio
+     */
+    function stopCapture(save = false) {
+        // Clear any running timers
+        clearInterval(timerInterval);
+        isCapturing = false;
+
+        // Reset the UI
+        initUI();
+
+        // Only update status if not already showing processing message
+        const currentStatus = statusEl.textContent;
+        if (!currentStatus.includes('processing') && !currentStatus.includes('Sending')) {
+            statusEl.textContent = save ? 'Processing...' : 'Capture canceled.';
         }
-      );
+        
+        // Clear the status message after 3 seconds if it's a cancel action
+        if (!save) {
+            setTimeout(() => {
+                if (statusEl.textContent.includes('canceled')) {
+                    statusEl.textContent = 'Ready to capture';
+                }
+            }, 3000);
+        }
     }
 
-    // Stop capture with optional save (no local save needed anymore)
-    function stopCapture() {
-      clearInterval(timerInterval);
-      isCapturing = false;
-
-      chrome.storage.local.remove(["isCapturing", "startTime"], function () {
-        updateUI();
-        chrome.runtime
-          .sendMessage({ action: "stopCapture" })
-          .catch((err) => console.log("Background script not ready:", err));
-      });
-    }
-
+    // ======================
     // Event Listeners
-    startBtn.addEventListener("click", startCapture);
-    finishBtn.addEventListener("click", () => stopCapture(true));
-    cancelBtn.addEventListener("click", () => stopCapture(false));
+    // ======================
+    
+    // Start capture button
+    startBtn.addEventListener('click', startCapture);
+    
+    /**
+     * Update status message with optional animation
+     * @param {string} message - The status message to display
+     */
+    function updateStatus(message) {
+        statusEl.textContent = message;
+    }
 
-    // Initialize the UI
+    // Save capture button
+    finishBtn.addEventListener('click', () => {
+        // Update status before stopping capture
+        statusEl.textContent = 'Sending for processing...';
+        stopCapture(true);
+    });
+    
+    // Cancel capture button
+    cancelBtn.addEventListener('click', () => {
+        stopCapture(false);
+    });
+
+    // Initialize the UI when the popup loads
     initUI();
   }
 
