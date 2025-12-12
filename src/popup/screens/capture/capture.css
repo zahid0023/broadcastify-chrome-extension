@@ -76,6 +76,15 @@ body {
   display: flex;
   gap: 10px;
   width: 100%;
+  /* Make sure the button row is always visible */
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+}
+
+/* Hide individual buttons initially */
+#finish, #cancel {
+  display: none;
 }
 
 /* Button styling */
