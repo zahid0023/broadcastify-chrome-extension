@@ -110,7 +110,7 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
   if (msg.action === "stopCapture") {
     console.log("Stopping capture");
     chrome.runtime.sendMessage({
-      action: "STOP_RECORDING"
+      action: "STOP_RECORDING",
     });
     sendResponse({ success: true });
     return true;
@@ -127,11 +127,14 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
       return;
     }
 
-    chrome.runtime.sendMessage({ action: "updateStatus", text: "Sending to Gemini..." });
+    chrome.runtime.sendMessage({
+      action: "updateStatus",
+      text: "Sending to Gemini...",
+    });
 
     try {
       const result = await generateSummaryInline(base64Data, mimeType);
-      console.log(result)
+      console.log(result);
       chrome.runtime.sendMessage({ action: "summaryResult", result });
     } catch (err) {
       chrome.runtime.sendMessage({ action: "error", message: err.message });
