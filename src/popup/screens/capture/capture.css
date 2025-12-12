@@ -1,0 +1,95 @@
+.capture-container {
+  font-family: Ubuntu, sans-serif;
+}
+
+#status,
+#timeRem {
+  margin: 10px auto;
+  text-align: center;
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 2px solid darkred;
+  white-space: nowrap;
+}
+
+.header img {
+  height: 64px;
+  margin: 0 20px 0 0;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: sans-serif;
+}
+
+.links p {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.button {
+  display: none;
+  text-align: center;
+  padding: 10px 20px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  color: white;
+  background: linear-gradient(135deg, #4a6bff, #8a2be2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  min-width: 120px;
+  margin: 0 5px;
+}
+
+.button:hover {
+  background: linear-gradient(135deg, #3a5bef, #7a1ad9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Specific button colors */
+#start {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+}
+
+#start:hover {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+}
+
+#finish {
+  background: linear-gradient(135deg, #2196f3, #1976d2);
+}
+
+#finish:hover {
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+}
+
+#cancel {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+}
+
+#cancel:hover {
+  background: linear-gradient(135deg, #d32f2f, #b71c1c);
+}

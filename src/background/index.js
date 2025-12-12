@@ -1,7 +1,7 @@
 console.log("Background loaded");
 
 // --- Configuration ---
-const GEMINI_API_KEY = "AIzaSyDIpuMl33IfvzK0b_i1cK_wa_9yd-o3538";
+const GEMINI_API_KEY = "AIzaSyBxFbG5TpMKppZ8jt0adMm_ZzWJzRBwIJ8";
 const GENERATE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 // --- Helper to send status updates to popup ---
@@ -100,7 +100,7 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
   if (msg.action === "stopCapture") {
     console.log("Stopping capture");
     chrome.runtime.sendMessage({
-      action: "STOP_RECORDING"
+      action: "STOP_RECORDING",
     });
     sendResponse({ success: true });
     return true;
@@ -117,11 +117,14 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
       return;
     }
 
-    chrome.runtime.sendMessage({ action: "updateStatus", text: "Sending to Gemini..." });
+    chrome.runtime.sendMessage({
+      action: "updateStatus",
+      text: "Sending to Gemini...",
+    });
 
     try {
       const result = await generateSummaryInline(base64Data, mimeType);
-      console.log(result)
+      console.log(result);
       chrome.runtime.sendMessage({ action: "summaryResult", result });
     } catch (err) {
       chrome.runtime.sendMessage({ action: "error", message: err.message });
