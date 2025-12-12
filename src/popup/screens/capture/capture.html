@@ -10,24 +10,34 @@
 </head>
 
 <body>
-  <div class="header">
-    <img src="../../assets/logo.png" alt="Logo" />
+  <header>
+    <img src="../../../assets/logo.png" alt="Logo" />
     <h1>Capture & Transcribe</h1>
-  </div>
-  <div id="status" class="status">Ready to capture</div>
-  <div id="timeRem" class="time-remaining"></div>
+  </header>
 
-  <!-- Main button container -->
-  <div class="button-container">
-    <!-- Start button (shown by default) -->
-    <button class="button" id="start">Start Capture</button>
+  <hr>
 
-    <!-- Button row for Save/Cancel (hidden by CSS) -->
-    <div class="button-row" id="action-buttons">
-      <button class="button" id="finish">Save</button>
-      <button class="button" id="cancel">Cancel</button>
-    </div>
-  </div>
+  <main>
+    <section>
+      <p id="status" class="status">
+      </p>
+
+      <p id="timeRem" class="time-remaining" hidden>
+        00:30:00
+      </p>
+    </section>
+
+    <section class="buttons">
+      <div>
+        <button id="startBtn" class="start-btn">Start</button>
+      </div>
+
+      <div class="cancel-stop-btns" id="cancelStopBtns">
+        <button id="cancelBtn" class="cancel-btn">Cancel</button>
+        <button id="stopBtn" class="stop-btn">Stop</button>
+      </div>
+    </section>
+  </main>
 </body>
 
 </html>
