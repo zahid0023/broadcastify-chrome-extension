@@ -1,0 +1,176 @@
+/* General body and heading styling */
+body, h1, h2, h3, p {
+  font-family: 'Segoe UI', Ubuntu, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+body {
+  width: 300px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+/* Header styling */
+.header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+  position: relative;
+}
+
+.header img {
+  height: 40px;
+  width: auto;
+  margin-right: 12px;
+  border-radius: 8px;
+  display: block;
+}
+
+.header h1 {
+  font-size: 22px;
+  color: #1a1a1a;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
+/* Status and time remaining */
+#status {
+  margin: 15px 0;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+  color: #4a4a4a;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#timeRem {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin: 10px 0 20px;
+  font-weight: 500;
+}
+
+/* Button container */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* Button row for side-by-side buttons */
+.button-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Button styling */
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  min-width: 100px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+/* Start button styling */
+#start {
+  width: auto;
+  min-width: 150px;
+  margin: 0 auto;
+  display: block;
+}
+
+/* Action buttons container */
+#action-buttons {
+  display: none;
+  width: 100%;
+  gap: 10px;
+}
+
+/* Individual action buttons */
+#finish, #cancel {
+  flex: 1;
+  display: block;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Button specific colors */
+#start {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+}
+
+#start:hover {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+}
+
+#finish {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+}
+
+#finish:hover {
+  background: linear-gradient(135deg, #1976D2, #1565C0);
+}
+
+#cancel {
+  background: #f44336;
+  color: white;
+  border: 1px solid #d32f2f;
+}
+
+#cancel:hover {
+  background: #d32f2f;
+  border-color: #b71c1c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 350px) {
+  body {
+    padding: 15px;
+    width: 280px;
+  }
+
+  .header h1 {
+    font-size: 16px;
+  }
+
+  .button {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+}

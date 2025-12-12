@@ -5,34 +5,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const cancelBtn = document.getElementById('cancel');
     const statusEl = document.getElementById('status');
     const timeRemEl = document.getElementById('timeRem');
+    const actionButtons = document.getElementById('action-buttons');
 
+    // State variables
     let isCapturing = false;
     let startTime;
     let timerInterval;
     const MAX_CAPTURE_TIME = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-    // Initialize the UI
+    /**
+     * Initialize the UI components
+     */
     function initUI() {
-        updateUI();
-
-        // Check for active capture session
-        chrome.storage.local.get(['isCapturing', 'startTime'], function (result) {
-            if (result.isCapturing && result.startTime) {
-                isCapturing = true;
-                startTime = result.startTime;
-                startTimer();
-                updateUI();
-            }
-        });
-    }
-
-    // Update UI based on current state
-    function updateUI() {
-        startBtn.style.display = isCapturing ? 'none' : 'block';
-        finishBtn.style.display = isCapturing ? 'block' : 'none';
-        cancelBtn.style.display = isCapturing ? 'block' : 'none';
-        statusEl.textContent = isCapturing ? 'Capture in progress...' : 'Ready to capture';
-        if (!isCapturing) timeRemEl.textContent = '';
+        // Show start button and hide action buttons
+        startBtn.style.display = 'block';
+        actionButtons.style.display = 'none';
+        
+        // Reset status and timer
+        statusEl.textContent = 'Ready to capture';
+        timeRemEl.textContent = '';
     }
 
     // Start the capture timer
@@ -59,74 +50,82 @@ document.addEventListener('DOMContentLoaded', function () {
         timeRemEl.textContent = `Time remaining: ${minutes}:${seconds.toString().padStart(2, '0')}`;
     }
 
-    // Start capture
+    /**
+     * Start the audio capture
+     */
     function startCapture() {
         isCapturing = true;
         startTime = Date.now();
 
-        chrome.storage.local.set({
-            isCapturing: true,
-            startTime: startTime
-        }, function () {
-            startTimer();
-            updateUI();
-            chrome.runtime.sendMessage({ action: 'startCapture' })
-                .catch(err => console.log('Background script not ready:', err));
-        });
+        // Toggle button visibility
+        startBtn.style.display = 'none';
+        actionButtons.style.display = 'flex';
+
+        // Update status
+        statusEl.textContent = 'Capture in progress...';
+        startTimer();
     }
 
-    // Stop capture with optional save (no local save needed anymore)
-    function stopCapture() {
+    /**
+     * Stop the audio capture
+     * @param {boolean} save - Whether to save the captured audio
+     */
+    function stopCapture(save = false) {
+        // Clear any running timers
         clearInterval(timerInterval);
         isCapturing = false;
 
-        chrome.storage.local.remove(['isCapturing', 'startTime'], function () {
-            updateUI();
-            chrome.runtime.sendMessage({ action: 'stopCapture' })
-                .catch(err => console.log('Background script not ready:', err));
-        });
+        // Reset the UI
+        initUI();
+
+        // Only update status if not already showing processing message
+        const currentStatus = statusEl.textContent;
+        if (!currentStatus.includes('processing') && !currentStatus.includes('Sending')) {
+            statusEl.textContent = save ? 'Processing...' : 'Capture canceled.';
+        }
+        
+        // Clear the status message after 3 seconds if it's a cancel action
+        if (!save) {
+            setTimeout(() => {
+                if (statusEl.textContent.includes('canceled')) {
+                    statusEl.textContent = 'Ready to capture';
+                }
+            }, 3000);
+        }
     }
 
+    // ======================
     // Event Listeners
+    // ======================
+    
+    // Start capture button
     startBtn.addEventListener('click', startCapture);
-    finishBtn.addEventListener('click', () => stopCapture(true));
-    cancelBtn.addEventListener('click', () => stopCapture(false));
+    
+    /**
+     * Update status message with optional animation
+     * @param {string} message - The status message to display
+     */
+    function updateStatus(message) {
+        statusEl.textContent = message;
+    }
 
-    document.getElementById("options").addEventListener("click", () => {
-        chrome.runtime.openOptionsPage();
+    // Save capture button
+    finishBtn.addEventListener('click', () => {
+        // Update status before stopping capture
+        statusEl.textContent = 'Sending for processing...';
+        stopCapture(true);
+    });
+    
+    // Cancel capture button
+    cancelBtn.addEventListener('click', () => {
+        stopCapture(false);
     });
 
-    // Initialize the UI
+    // Initialize the UI when the popup loads
     initUI();
 });
 
 chrome.runtime.onMessage.addListener((msg) => {
-    console.log("OK!!")
-    if (msg.action === "summaryResult") {
-        const result = msg.result;
-
-        // Update status
-        const statusEl = document.getElementById("status");
-        statusEl.textContent = "Summary ready!";
-
-        // Automatically trigger Save As dialog
-        const blob = new Blob([result], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-
-        chrome.downloads.download({
-            url: url,
-            filename: "transcription_summary.txt",
-            saveAs: true // <-- this opens the "Save As" dialog automatically
-        }, (downloadId) => {
-            if (chrome.runtime.lastError) {
-                console.error("Download failed:", chrome.runtime.lastError);
-            } else {
-                console.log("Download started with ID:", downloadId);
-            }
-            URL.revokeObjectURL(url); // Clean up
-        });
-    }
-
     if (msg.action === "updateStatus") {
         document.getElementById("status").textContent = msg.text;
     }
