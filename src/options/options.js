@@ -1,51 +1,37 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const muteCheckbox = document.getElementById("mute");
-  const maxTimeInput = document.getElementById("maxTime");
-  const removeLimitCheckbox = document.getElementById("removeLimit");
-  const qualitySelect = document.getElementById("quality");
-  const saveButton = document.getElementById("save");
-  const status = document.getElementById("status");
+document.addEventListener('DOMContentLoaded', () => {
+  const aiSelect = document.getElementById('aiProvider');
+  const apiKeyInput = document.getElementById('apiKey');
+  const saveButton = document.getElementById('save');
+  const status = document.getElementById('status');
 
-  // Load saved settings
-  chrome.storage.sync.get(
-    {
-      muteTab: false,
-      maxTime: 30,            
-      limitRemoved: false,
-      format: "mp3",
-      quality: 192
-    },
-    (data) => {
-      muteCheckbox.checked = data.muteTab;
-      maxTimeInput.value = data.maxTime;
-      removeLimitCheckbox.checked = data.limitRemoved;
-      qualitySelect.value = data.quality;
-    }
-  );
+  // Save API key for the selected provider
+  saveButton.addEventListener('click', () => {
+    const provider = aiSelect.value;
+    const inputKey = apiKeyInput.value.trim() || chrome.storage.sync.get([providers.provider], (data) => {
+    });
 
-  // Save settings
-  saveButton.addEventListener("click", () => {
-    let maxTimeVal = parseInt(maxTimeInput.value);
+    // Load current providers object from storage
+    chrome.storage.sync.get(null, (data) => {
+      console.log(data);
+      const providers = data || {
+        chatgpt: null,
+        gemini: null,
+        claude: null,
+        default: 'gemini'
+      };
 
-    if (!removeLimitCheckbox.checked) {
-      if (isNaN(maxTimeVal) || maxTimeVal < 1 || maxTimeVal > 30) {
-        status.textContent = "Enter a valid time from 1–30 minutes.";
-        return;
-      }
-    }
+      // Use input value if provided, otherwise keep previous value
+      const keyToSave = inputKey !== '' ? inputKey : providers[provider];
 
-    chrome.storage.sync.set(
-      {
-        muteTab: muteCheckbox.checked,
-        maxTime: removeLimitCheckbox.checked ? 30 : maxTimeVal,
-        limitRemoved: removeLimitCheckbox.checked,
-        format: "mp3", // ALWAYS mp3
-        quality: parseInt(qualitySelect.value)
-      },
-      () => {
-        status.textContent = "Settings saved!";
-        setTimeout(() => (status.textContent = ""), 1500);
-      }
-    );
+      // Update providers object
+      providers[provider] = keyToSave;
+      providers.default = provider;
+
+      // Save back to storage
+      chrome.storage.sync.set(providers, () => {
+        console.log(`API key saved for ${provider}:`, keyToSave);
+      });
+      console.log(providers);
+    });
   });
 });

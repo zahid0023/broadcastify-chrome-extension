@@ -1,36 +1,48 @@
 console.log("Background loaded");
 
-// --- Configuration ---
-const GEMINI_API_KEY = "AIzaSyBxFbG5TpMKppZ8jt0adMm_ZzWJzRBwIJ8";
-const GENERATE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+getProviders().then((providers) => {
+  const GEMINI_API_KEY = providers.gemini;
+  console.log('Gemini API Key:', GEMINI_API_KEY);
+});
 
 // --- Helper to send status updates to popup ---
 function sendStatus(text) {
   chrome.runtime.sendMessage({ action: "updateStatus", text });
 }
 
-// --- Generate transcription + summary using Gemini ---
-async function generateSummaryInline(base64Data, mimeType) {
+// Helper to get providers object from storage
+function getProviders() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(['providers'], (data) => {
+      console.log(data.providers);
+      const providers = data.providers || {
+        chatgpt: null,
+        gemini: null,
+        claude: null,
+        default: 'gemini'
+      };
+      resolve(providers);
+    });
+  });
+}
+
+async function generateSummaryInlineUsingGemini(base64Data, mimeType) {
+  const providers = await getProviders(); // wait for storage
+  const GEMINI_API_KEY = providers.gemini;
+  if (!GEMINI_API_KEY) throw new Error("Gemini API key is not set!");
+
+  const GENERATE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
   const requestBody = {
     contents: [
       {
         parts: [
-          {
-            inlineData: {
-              mimeType,
-              data: base64Data,
-            },
-          },
-          {
-            text: "Transcribe the full audio content. After the transcription, write a concise, three-point executive summary. Format the output with the transcription first, followed by a '---' separator, and then the summary.",
-          },
-        ],
-      },
+          { inlineData: { mimeType, data: base64Data } },
+          { text: "Transcribe the full audio content. After the transcription, write a concise, three-point executive summary. Format the output with the transcription first, followed by a '---' separator, and then the summary." }
+        ]
+      }
     ],
-    generationConfig: {
-      temperature: 0.1,
-      maxOutputTokens: 4096,
-    },
+    generationConfig: { temperature: 0.1, maxOutputTokens: 4096 }
   };
 
   sendStatus("Sending audio to Gemini API...");
@@ -42,8 +54,6 @@ async function generateSummaryInline(base64Data, mimeType) {
   });
 
   const data = await response.json();
-  console.log("Gemini API response:", data);
-
   if (data.error) throw new Error(data.error.message || "Gemini API error");
 
   return data.candidates[0].content.parts[0].text;
@@ -132,3 +142,30 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
   }
   return false;
 });
+
+async function createContact(data) {
+  const url = 'https://rest.gohighlevel.com/v1/contacts/';
+  const token = '<token>'; // Replace with your actual token
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data) // send the JSON object as request body
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log('Contact created successfully:', result);
+    return result;
+  } catch (error) {
+    console.error('Error creating contact:', error);
+    throw error;
+  }
+}
