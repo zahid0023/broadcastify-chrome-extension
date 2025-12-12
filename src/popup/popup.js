@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
       screenName === "login"
         ? chrome.runtime.getURL("src/popup/screens/login/login.html")
         : chrome.runtime.getURL("src/popup/screens/capture/capture.html");
+        
     const cssPath =
       screenName === "login"
         ? chrome.runtime.getURL("src/popup/screens/login/login.css")
@@ -125,6 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cancelBtn = document.getElementById("cancel");
     const statusEl = document.getElementById("status");
     const timeRemEl = document.getElementById("timeRem");
+    const actionButtons = document.getElementById("action-buttons")
 
     if (!startBtn || !finishBtn || !cancelBtn || !statusEl || !timeRemEl) {
       console.error("Capture screen elements not found");
@@ -198,13 +200,13 @@ document.addEventListener("DOMContentLoaded", function () {
       isCapturing = true;
       startTime = Date.now();
 
-        // Toggle button visibility
-        startBtn.style.display = 'none';
-        actionButtons.style.display = 'flex';
+      // Toggle button visibility
+      startBtn.style.display = 'none';
+      actionButtons.style.display = "block";
 
-        // Update status
-        statusEl.textContent = 'Capture in progress...';
-        startTimer();
+      // Update status
+      statusEl.textContent = 'Capture in progress...';
+      startTimer();
     }
 
     /**
@@ -212,54 +214,54 @@ document.addEventListener("DOMContentLoaded", function () {
      * @param {boolean} save - Whether to save the captured audio
      */
     function stopCapture(save = false) {
-        // Clear any running timers
-        clearInterval(timerInterval);
-        isCapturing = false;
+      // Clear any running timers
+      clearInterval(timerInterval);
+      isCapturing = false;
 
-        // Reset the UI
-        initUI();
+      // Reset the UI
+      initUI();
 
-        // Only update status if not already showing processing message
-        const currentStatus = statusEl.textContent;
-        if (!currentStatus.includes('processing') && !currentStatus.includes('Sending')) {
-            statusEl.textContent = save ? 'Processing...' : 'Capture canceled.';
-        }
-        
-        // Clear the status message after 3 seconds if it's a cancel action
-        if (!save) {
-            setTimeout(() => {
-                if (statusEl.textContent.includes('canceled')) {
-                    statusEl.textContent = 'Ready to capture';
-                }
-            }, 3000);
-        }
+      // Only update status if not already showing processing message
+      const currentStatus = statusEl.textContent;
+      if (!currentStatus.includes('processing') && !currentStatus.includes('Sending')) {
+        statusEl.textContent = save ? 'Processing...' : 'Capture canceled.';
+      }
+
+      // Clear the status message after 3 seconds if it's a cancel action
+      if (!save) {
+        setTimeout(() => {
+          if (statusEl.textContent.includes('canceled')) {
+            statusEl.textContent = 'Ready to capture';
+          }
+        }, 3000);
+      }
     }
 
     // ======================
     // Event Listeners
     // ======================
-    
+
     // Start capture button
     startBtn.addEventListener('click', startCapture);
-    
+
     /**
      * Update status message with optional animation
      * @param {string} message - The status message to display
      */
     function updateStatus(message) {
-        statusEl.textContent = message;
+      statusEl.textContent = message;
     }
 
     // Save capture button
     finishBtn.addEventListener('click', () => {
-        // Update status before stopping capture
-        statusEl.textContent = 'Sending for processing...';
-        stopCapture(true);
+      // Update status before stopping capture
+      statusEl.textContent = 'Sending for processing...';
+      stopCapture(true);
     });
-    
+
     // Cancel capture button
     cancelBtn.addEventListener('click', () => {
-        stopCapture(false);
+      stopCapture(false);
     });
 
     // Initialize the UI when the popup loads

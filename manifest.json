@@ -3,40 +3,39 @@
   "name": "Capture and Transcribe",
   "description": "Capture audio from your current tab and save it as an audio file",
   "version": "1.0.0",
-  
   "permissions": [
     "tabCapture",
     "storage",
     "offscreen"
   ],
-  
   "background": {
     "service_worker": "src/background/index.js"
   },
-  
   "action": {
-    "default_popup": "src/popup/screens/capture/capture.html",
+    "default_popup": "src/popup/index.html",
     "default_icon": {
       "128": "src/assets/logo.png"
     }
   },
-  
   "web_accessible_resources": [
     {
       "resources": [
         "src/assets/logo.png"
       ],
-      "matches": ["<all_urls>"]
+      "matches": [
+        "<all_urls>"
+      ]
     },
     {
       "resources": [
         "src/offscreen/offscreen.html",
         "src/offscreen/offscreen.js"
       ],
-      "matches": ["<all_urls>"]
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
-  
   "icons": {
     "128": "src/assets/logo.png"
   }

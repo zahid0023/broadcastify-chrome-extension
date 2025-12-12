@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Capture & Transcribe</title>
-    <script src="../../popup.js" defer></script>
-    <link rel="stylesheet" href="capture.css" type="text/css" />
-  </head>
-  <body>
-    <div class="header">
-      <img src="../../assets/logo.png" alt="Logo" />
-      <h1>Capture & Transcribe</h1>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capture & Transcribe</title>
+  <script src="../../popup.js" defer></script>
+  <link rel="stylesheet" href="capture.css" type="text/css" />
+</head>
+
+<body>
+  <div class="header">
+    <img src="../../assets/logo.png" alt="Logo" />
+    <h1>Capture & Transcribe</h1>
+  </div>
+  <div id="status" class="status">Ready to capture</div>
+  <div id="timeRem" class="time-remaining"></div>
+
+  <!-- Main button container -->
+  <div class="button-container">
+    <!-- Start button (shown by default) -->
+    <button class="button" id="start">Start Capture</button>
+
+    <!-- Button row for Save/Cancel (hidden by CSS) -->
+    <div class="button-row" id="action-buttons">
+      <button class="button" id="finish">Save</button>
+      <button class="button" id="cancel">Cancel</button>
     </div>
-    <div id="status" class="status">Ready to capture</div>
-    <div id="timeRem" class="time-remaining"></div>
-    
-    <!-- Main button container -->
-    <div class="button-container">
-      <!-- Start button (shown by default) -->
-      <button class="button" id="start">Start Capture</button>
-      
-      <!-- Button row for Save/Cancel (hidden by CSS) -->
-      <div class="button-row" id="action-buttons">
-        <button class="button" id="finish">Save</button>
-        <button class="button" id="cancel">Cancel</button>
-      </div>
-    </div>
-  </body>
+  </div>
+</body>
+
 </html>
